@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 40px;
+}
+
+.buttons {
+    justify-content: center;
+}
+
+
+.root {
+    width: "100%";
+}
+
+.backButton {
+    margin-right: auto;
+}
+
+.instructions {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
