@@ -9,9 +9,8 @@ import Button from "@material-ui/core/Button";
 import styles from "./UploadedFileCard.module.css";
 
 const UploadedFile = (list, resetFunc) => {
-  console.log(list);
   return (
-    <Card className={styles.root}>
+    <Card className={styles.root} variant="outlined">
       <CardActionArea>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
