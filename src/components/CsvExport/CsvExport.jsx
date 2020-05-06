@@ -5,8 +5,7 @@ import styles from "./CsvExport.module.css";
 let buttonStyles = {
   //pass other props, like styles
   boxShadow: "inset 0px 1px 0px 0px #e184f3",
-  background: "linear-gradient(to bottom, #c123de 5%, #a20dbd 100%)",
-  backgroundColor: "#c123de",
+  backgroundColor: "#87509C",
   borderRadius: "6px",
   border: "1px solid #a511c0",
   display: "inline-block",

@@ -1,6 +1,8 @@
 .container {
     display: flex;
     align-items: center;
+    min-height: 60vh;
+    padding-top: 0;
     min-width: 750px;
     justify-content: center;
     flex-direction: column;
