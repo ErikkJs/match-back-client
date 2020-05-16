@@ -1,4 +1,4 @@
-import { getMatchBacks } from "../../api";
+import { getMatchBacks, merge, mergeSort } from "../../api";
 import React, { useState } from "react";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -12,7 +12,7 @@ import csvDownload from "../CsvExport/CsvExport";
 
 const CSV = require("csv-string");
 
-const csvToJson = (file) => {
+const csvToJson = file => {
   let keys = file.shift();
   file = file.map(function (row) {
     return keys.reduce(function (obj, key, i) {
@@ -22,11 +22,24 @@ const csvToJson = (file) => {
   });
   return file;
 };
-const readFileAsync = (file) => {
+
+const cleanDateAttribute = listFile => {
+  
+  listFile = listFile.filter(row => typeof row["Customer Since"] != undefined)
+  console.log(listFile)
+  listFile.forEach((clientRow) => {
+    clientRow["Customer Since"] ? clientRow['Customer Since'] = new Date(clientRow["Customer Since"].slice(0,-2)) : console.log("undefined");
+    clientRow["Last Purchase Date"] ? clientRow['Last Purchase Date'] = new Date(clientRow["Last Purchase Date"].slice(0,-2)) : console.log("undefined");
+  });
+  return listFile;
+};
+
+const readFileAsync = file => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
       let file = CSV.parse(reader.result);
+
       let jsonCsv = csvToJson(file);
       resolve(jsonCsv);
     };
@@ -113,9 +126,10 @@ export default function HorizontalLabelPositionBelowStepper() {
     if (file) {
       setList(file);
       setErrorMessage(null);
-      setListData(await readFileAsync(file[0]));
+      setListData(mergeSort(cleanDateAttribute(await readFileAsync(file[0]))))
     }
   };
+
   const handleMatchBack = async (file) => {
     if (file) {
       setMatchBack(file);
@@ -188,7 +202,7 @@ export default function HorizontalLabelPositionBelowStepper() {
               >
                 Back
               </Button>
-              {activeStep === steps.length - 1 ? null: (
+              {activeStep === steps.length - 1 ? null : (
                 <Button
                   variant="contained"
                   color="primary"
