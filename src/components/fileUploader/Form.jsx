@@ -23,6 +23,25 @@ const csvToJson = file => {
   return file;
 };
 
+let sortMatchBackData = (matchBackArray) => {
+  return new Promise((resolve, reject) => {
+
+    try{
+    let arrayToSort = matchBackArray;
+      arrayToSort.sort((leftSide, rightSide) => {
+        if (rightSide["Customer Since"].getTime() > leftSide["Customer Since"].getTime()) {
+          return 1;
+        }
+        return -1;
+      })
+      resolve(arrayToSort)
+    }catch(e){
+      resolve(matchBackArray)
+    }
+  })
+
+}
+
 const cleanDateAttribute = listFile => {
   return new Promise((resolve, reject) => {
     listFile = listFile.filter(row => typeof row["Customer Since"] != undefined || '')
@@ -122,7 +141,7 @@ export default function HorizontalLabelPositionBelowStepper() {
   const createCSV = async () => {
     let matchMadeCSV = await getMatchBacks(listData, matchBackData);
     console.log(matchMadeCSV);
-    matchMadeCSV ? setMatchBackCSV(matchMadeCSV) : handleError();
+    matchMadeCSV ? setMatchBackCSV(await sortMatchBackData(matchMadeCSV)) : handleError();
   };
   const handleList = async (file) => {
     if (file) {

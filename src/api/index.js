@@ -42,13 +42,13 @@ export const mergeSort = (unsortedArray) => {
 };
 
 export const Sort = (unsortedArray, FunctionToRun) => {
-  return new Promise( (resolve,reject) => {
-    resolve (mergeSort(unsortedArray))
+  return new Promise((resolve, reject) => {
+    resolve(mergeSort(unsortedArray))
   })
 }
 export const getMatchBacks = (listData, matchBackData) => {
+  let matchBackArray = [];
   return new Promise((resolve, reject) => {
-    let matchBackArray = [];
     if (listData) {
       matchBackData.forEach((matchBackRow) => {
         for (let i = 0; i < listData.length; i++) {
@@ -59,18 +59,11 @@ export const getMatchBacks = (listData, matchBackData) => {
         }
       });
       console.log(matchBackArray)
-      matchBackArray.sort((leftSide, rightSide) =>{
-        console.log(leftSide, rightSide)
-        if(rightSide["Customer Since"].getTime() > leftSide["Customer Since"].getTime()){
-          return 1;
-        }
-        return -1;
-      })
       resolve(matchBackArray);
     }
-    reject(false);
+    reject(false)
   }).catch((e) => {
     console.log(e, "caught an error no address");
-    return false;
+    return matchBackArray;
   });
 };
