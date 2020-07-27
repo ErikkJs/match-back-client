@@ -1,4 +1,4 @@
-import { getMatchBacks } from "../../api";
+import { getMatchBacks, merge, mergeSort } from "../../api";
 import React, { useState } from "react";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -24,14 +24,16 @@ const csvToJson = file => {
 };
 
 const cleanDateAttribute = listFile => {
-  
-  listFile = listFile.filter(row => typeof row["Customer Since"] != undefined)
-  console.log(listFile)
-  listFile.forEach((clientRow) => {
-    clientRow["Customer Since"] ? clientRow['Customer Since'] = new Date(clientRow["Customer Since"].slice(0,-2)) : console.log("undefined");
-    clientRow["Last Purchase Date"] ? clientRow['Last Purchase Date'] = new Date(clientRow["Last Purchase Date"].slice(0,-2)) : console.log("undefined");
-  });
-  return listFile;
+  return new Promise((resolve, reject) => {
+    listFile = listFile.filter(row => typeof row["Customer Since"] != undefined || '')
+    console.log(listFile)
+    listFile.forEach((clientRow) => {
+      clientRow["Customer Since"] ? clientRow['Customer Since'] = new Date(clientRow["Customer Since"].slice(0,-2)) : console.log("undefined");
+      clientRow["Last Purchase Date"] ? clientRow['Last Purchase Date'] = new Date(clientRow["Last Purchase Date"].slice(0,-2)) : console.log("undefined");
+    });
+    resolve(listFile);
+  })
+
 };
 
 const readFileAsync = file => {
@@ -55,7 +57,6 @@ function getSteps() {
     "Create Matchback List",
   ];
 }
-
 export default function HorizontalLabelPositionBelowStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -125,23 +126,22 @@ export default function HorizontalLabelPositionBelowStepper() {
   };
   const handleList = async (file) => {
     if (file) {
-      setErrorMessage(null);
       setList(file);
-      setListData(cleanDateAttribute(await readFileAsync(file[0])))
+      setErrorMessage(null);
+      setListData(await cleanDateAttribute(await readFileAsync(file[0])))
     }
   };
 
   const handleMatchBack = async (file) => {
     if (file) {
-      console.log(file)
-      setErrorMessage(null);
       setMatchBack(file);
+      setErrorMessage(null);
       setMatchBackData(await readFileAsync(file[0]));
     }
   };
   const handleError = () => {
     setErrorMessage(
-      `List Is Invalid, Ensure An Address Field Exists In The List Supplied \n The Adress Column On Both Lists Should Be Named "Address"`
+      "List Is Invalid, Ensure An Address Field Exists In The List Supplied"
     );
     resetList();
   };
