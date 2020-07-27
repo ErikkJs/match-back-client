@@ -1,4 +1,4 @@
-import { getMatchBacks, merge, mergeSort } from "../../api";
+import { getMatchBacks } from "../../api";
 import React, { useState } from "react";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -55,6 +55,7 @@ function getSteps() {
     "Create Matchback List",
   ];
 }
+
 export default function HorizontalLabelPositionBelowStepper() {
   const [activeStep, setActiveStep] = React.useState(0);
 
@@ -124,22 +125,23 @@ export default function HorizontalLabelPositionBelowStepper() {
   };
   const handleList = async (file) => {
     if (file) {
-      setList(file);
       setErrorMessage(null);
-      setListData(mergeSort(cleanDateAttribute(await readFileAsync(file[0]))))
+      setList(file);
+      setListData(cleanDateAttribute(await readFileAsync(file[0])))
     }
   };
 
   const handleMatchBack = async (file) => {
     if (file) {
-      setMatchBack(file);
+      console.log(file)
       setErrorMessage(null);
+      setMatchBack(file);
       setMatchBackData(await readFileAsync(file[0]));
     }
   };
   const handleError = () => {
     setErrorMessage(
-      "List Is Invalid, Ensure An Address Field Exists In The List Supplied"
+      `List Is Invalid, Ensure An Address Field Exists In The List Supplied \n The Adress Column On Both Lists Should Be Named "Address"`
     );
     resetList();
   };
